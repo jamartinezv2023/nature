@@ -1,33 +1,26 @@
-vendor/
-node_modules/
+/vendor/
+/node_modules/
 
 .env
-.env.local
 
 /storage/logs/*
+!/storage/logs/.gitkeep
+
 /storage/mail/*
+!/storage/mail/.gitkeep
+
+/storage/cache/*
+!/storage/cache/.gitkeep
+
+/storage/sessions/*
+!/storage/sessions/.gitkeep
+
+.phpunit.result.cache
 
 coverage/
-.phpunit.result.cache
 
 .idea/
 .vscode/
 
-Thumbs.db
 .DS_Store
-
-composer.lock
-package-lock.json
-
-/public/build/
-
-*.zip
-*.tar
-*.gz
-
-
-.env
-.env.production
-/vendor
-/node_modules
-/storage/logs/*
+Thumbs.db
