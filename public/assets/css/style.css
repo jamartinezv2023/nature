@@ -1,0 +1,40 @@
+/* =========================================================
+ARCHIVO:
+/nature/assets/css/style.css
+========================================================= */
+
+body{
+    margin:0;
+    padding:0;
+    background:#eef2f7;
+}
+
+.card{
+    border-radius:20px;
+}
+
+.card-header{
+    border-bottom:none;
+}
+
+.btn-success{
+    background:#198754;
+    border:none;
+}
+
+.btn-success:hover{
+    background:#157347;
+}
+
+.form-control:focus{
+    box-shadow:none;
+    border-color:#0d6efd;
+}
+
+a{
+    text-decoration:none;
+}
+
+a:hover{
+    text-decoration:underline;
+}
