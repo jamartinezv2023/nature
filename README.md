@@ -1,35 +1,64 @@
+# Nature SaaS Platform
 
-# Auth Microservice - Plataforma Educativa
+Professional educational SaaS platform built with PHP 8.3.
 
-## Características
+---
 
-- Registro de usuarios
-- Inicio de sesión
-- Cierre de sesión
-- Recuperación de contraseña
-- Doble factor de autenticación (2FA)
-- OTP vía email
-- OTP vía móvil
-- Protección CSRF
-- Hashing seguro
-- Arquitectura desacoplada
-- Compatible con CRUD Instituciones
+# Requirements
 
-## Tecnologías
+- PHP 8.3+
+- Composer
+- MySQL 8+
+- Laragon/XAMPP/Linux stack
 
-- PHP 8
-- MySQL/MariaDB
-- Bootstrap 5
-- PDO
-- Arquitectura por capas
+---
 
-## Instalación
+# Installation
 
-1. Crear base de datos
-2. Ejecutar migration.sql
-3. Configurar config/env.php
-4. Servir carpeta public/
+## Clone repository
 
-## Flujo
+git clone https://github.com/jamartinezv2023/nature.git
 
-Frontend -> Controller -> Service -> Repository -> DB
+---
+
+## Install dependencies
+
+composer install
+
+---
+
+## Configure environment
+
+cp .env.example .env
+
+---
+
+## Import database
+
+Import:
+
+database/migrations/001_full_saas_schema.sql
+
+---
+
+## Run server
+
+php -S localhost:8000 -t public
+
+---
+
+# Architecture
+
+- PSR-4
+- Dependency Injection
+- Repository Pattern
+- Service Layer
+- Bootstrap Application
+- Clean Architecture inspired
+
+---
+
+# Testing
+
+php vendor/bin/phpunit
+
