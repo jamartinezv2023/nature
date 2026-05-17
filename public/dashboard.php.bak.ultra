@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Nature Platform</title>
+
+<link rel="stylesheet"
+href="assets/css/dashboard.css">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="logo">
+Nature
+</div>
+
+<nav class="nav-links">
+
+<a class="active" href="#">
+<i class="fa-solid fa-chart-line"></i>
+<span>Dashboard</span>
+</a>
+
+<a href="#">
+<i class="fa-solid fa-users"></i>
+<span>Usuarios</span>
+</a>
+
+<a href="#">
+<i class="fa-solid fa-school"></i>
+<span>Instituciones</span>
+</a>
+
+<a href="#">
+<i class="fa-solid fa-book"></i>
+<span>Académico</span>
+</a>
+
+<a href="#">
+<i class="fa-solid fa-chart-pie"></i>
+<span>Analítica</span>
+</a>
+
+<a href="#">
+<i class="fa-solid fa-brain"></i>
+<span>IA Predictiva</span>
+</a>
+
+<a href="#">
+<i class="fa-solid fa-universal-access"></i>
+<span>Accesibilidad</span>
+</a>
+
+<a href="#">
+<i class="fa-solid fa-right-from-bracket"></i>
+<span>Cerrar sesión</span>
+</a>
+
+</nav>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar glass shadow-premium">
+
+<div class="search-box">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input
+type="text"
+placeholder="Buscar usuarios, instituciones, reportes...">
+
+</div>
+
+<div class="profile">
+
+<i class="fa-solid fa-bell"></i>
+
+<div class="avatar">
+JM
+</div>
+
+</div>
+
+</header>
+
+<section class="hero shadow-premium fade-up">
+
+<h1>
+Plataforma Educativa Inteligente
+</h1>
+
+<p>
+Sistema moderno, inclusivo, accesible y adaptativo
+basado en analítica e inteligencia artificial.
+</p>
+
+</section>
+
+<section class="cards">
+
+<div class="card">
+
+<i class="fa-solid fa-users"></i>
+
+<h2>1,250</h2>
+
+<p>Usuarios activos</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-school"></i>
+
+<h2>24</h2>
+
+<p>Instituciones</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<h2>5,800</h2>
+
+<p>Sesiones</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-brain"></i>
+
+<h2>98%</h2>
+
+<p>Precisión IA</p>
+
+</div>
+
+</section>
+
+<section class="charts">
+
+<div class="chart-card">
+
+<h3>
+Distribución institucional
+</h3>
+
+<div class="chart-container">
+<canvas id="pieChart"></canvas>
+</div>
+
+</div>
+
+<div class="chart-card">
+
+<h3>
+Actividad académica
+</h3>
+
+<div class="chart-container">
+<canvas id="barChart"></canvas>
+</div>
+
+</div>
+
+</section>
+
+<section class="table-card">
+
+<div class="table-header">
+
+<h2>
+Instituciones recientes
+</h2>
+
+<button class="btn-primary">
++ Nueva institución
+</button>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Institución</th>
+<th>Estado</th>
+<th>Usuarios</th>
+<th>Acciones</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>1</td>
+
+<td>I.E. Sagrada Familia</td>
+
+<td>
+<span class="status active-status">
+Activo
+</span>
+</td>
+
+<td>560</td>
+
+<td>
+<i class="fa-solid fa-eye"></i>
+&nbsp;&nbsp;
+<i class="fa-solid fa-pen"></i>
+</td>
+
+</tr>
+
+<tr>
+
+<td>2</td>
+
+<td>María Montessori</td>
+
+<td>
+<span class="status active-status">
+Activo
+</span>
+</td>
+
+<td>320</td>
+
+<td>
+<i class="fa-solid fa-eye"></i>
+&nbsp;&nbsp;
+<i class="fa-solid fa-pen"></i>
+</td>
+
+</tr>
+
+<tr>
+
+<td>3</td>
+
+<td>El Paraíso</td>
+
+<td>
+<span class="status pending-status">
+Pendiente
+</span>
+</td>
+
+<td>210</td>
+
+<td>
+<i class="fa-solid fa-eye"></i>
+&nbsp;&nbsp;
+<i class="fa-solid fa-pen"></i>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</section>
+
+<footer class="footer">
+
+© 2026 Nature Platform · Smart Education · AI · Accessibility · UX
+
+</footer>
+
+</main>
+
+<script>
+
+new Chart(
+document.getElementById('pieChart'),
+{
+    type:'doughnut',
+
+    data:{
+
+        labels:[
+            'Primaria',
+            'Secundaria',
+            'Media',
+            'Inclusión'
+        ],
+
+        datasets:[{
+
+            data:[35,25,15,25],
+
+            backgroundColor:[
+                '#4098d7',
+                '#f95d80',
+                '#fb9f3f',
+                '#f4c95d'
+            ],
+
+            borderWidth:2
+        }]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+
+            legend:{
+
+                position:'bottom'
+            }
+        }
+    }
+});
+
+new Chart(
+document.getElementById('barChart'),
+{
+    type:'bar',
+
+    data:{
+
+        labels:[
+            'Ene',
+            'Feb',
+            'Mar',
+            'Abr',
+            'May',
+            'Jun'
+        ],
+
+        datasets:[{
+
+            label:'Actividad',
+
+            data:[
+                120,
+                190,
+                300,
+                500,
+                350,
+                420
+            ],
+
+            borderRadius:14
+        }]
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false
+    }
+});
+</script>
+
+</body>
+</html>

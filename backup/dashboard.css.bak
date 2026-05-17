@@ -1,0 +1,524 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --sidebar-width:250px;
+
+    --bg:#eef2f7;
+
+    --sidebar:#166534;
+
+    --sidebar-dark:#14532d;
+
+    --primary:#2563eb;
+
+    --success:#16a34a;
+
+    --warning:#f59e0b;
+
+    --danger:#dc2626;
+
+    --card:#ffffff;
+
+    --text:#0f172a;
+
+    --muted:#64748b;
+
+    --border:#dbe4ee;
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    overflow-x:hidden;
+}
+
+/*
+|--------------------------------------------------------------------------
+| SIDEBAR
+|--------------------------------------------------------------------------
+*/
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:var(--sidebar-width);
+
+    height:100vh;
+
+    background:
+    linear-gradient(
+        180deg,
+        var(--sidebar),
+        var(--sidebar-dark)
+    );
+
+    padding:1.5rem 1rem;
+
+    z-index:2000;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.sidebar-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:2rem;
+}
+
+.logo{
+
+    color:white;
+
+    font-size:2rem;
+
+    font-weight:800;
+}
+
+.close-btn{
+
+    border:none;
+
+    background:none;
+
+    color:white;
+
+    font-size:1.3rem;
+
+    cursor:pointer;
+}
+
+.nav-links{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.4rem;
+}
+
+.nav-links a{
+
+    text-decoration:none;
+
+    color:rgba(255,255,255,.9);
+
+    padding:1rem 1rem;
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+
+    transition:.25s ease;
+}
+
+.nav-links a:hover{
+
+    background:rgba(255,255,255,.12);
+
+    transform:translateX(4px);
+}
+
+.nav-links a.active{
+
+    background:white;
+
+    color:var(--sidebar);
+
+    font-weight:700;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MAIN
+|--------------------------------------------------------------------------
+*/
+
+.main{
+
+    margin-left:var(--sidebar-width);
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+/*
+|--------------------------------------------------------------------------
+| TOPBAR
+|--------------------------------------------------------------------------
+*/
+
+.topbar{
+
+    height:80px;
+
+    background:white;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 2rem;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+}
+
+.left-navbar{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+}
+
+.menu-btn{
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:var(--sidebar);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:1.1rem;
+}
+
+.search-box{
+
+    width:340px;
+
+    background:#f1f5f9;
+
+    border-radius:14px;
+
+    padding:.9rem 1rem;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.8rem;
+}
+
+.search-box input{
+
+    border:none;
+
+    background:none;
+
+    width:100%;
+
+    outline:none;
+}
+
+.right-navbar{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+}
+
+.icon-btn{
+
+    width:44px;
+
+    height:44px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#f1f5f9;
+
+    cursor:pointer;
+}
+
+.avatar{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:50%;
+
+    background:
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:700;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CONTENT
+|--------------------------------------------------------------------------
+*/
+
+.content{
+
+    padding:2rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO
+|--------------------------------------------------------------------------
+*/
+
+.hero{
+
+    background:
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    border-radius:26px;
+
+    padding:3rem;
+
+    color:white;
+
+    margin-bottom:2rem;
+
+    box-shadow:
+    0 20px 40px rgba(37,99,235,.2);
+}
+
+.hero h1{
+
+    font-size:3rem;
+
+    font-weight:800;
+
+    margin-bottom:1rem;
+}
+
+.hero p{
+
+    font-size:1.1rem;
+
+    opacity:.95;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CARDS
+|--------------------------------------------------------------------------
+*/
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(240px,1fr));
+
+    gap:1.5rem;
+
+    margin-bottom:2rem;
+}
+
+.card-modern{
+
+    border-radius:22px;
+
+    padding:1.7rem;
+
+    color:white;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 10px 30px rgba(15,23,42,.08);
+
+    transition:.3s ease;
+}
+
+.card-modern:hover{
+
+    transform:translateY(-6px);
+}
+
+.card-modern i{
+
+    font-size:2rem;
+
+    margin-bottom:1rem;
+}
+
+.card-modern h2{
+
+    font-size:2.3rem;
+
+    margin-bottom:.5rem;
+}
+
+.card-green{
+
+    background:#15803d;
+}
+
+.card-blue{
+
+    background:#0284c7;
+}
+
+.card-orange{
+
+    background:#ea580c;
+}
+
+.card-red{
+
+    background:#dc2626;
+}
+
+/*
+|--------------------------------------------------------------------------
+| TABLE
+|--------------------------------------------------------------------------
+*/
+
+.table-box{
+
+    background:white;
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 10px 30px rgba(15,23,42,.06);
+}
+
+.table{
+
+    margin-bottom:0;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FOOTER
+|--------------------------------------------------------------------------
+*/
+
+.footer{
+
+    margin-top:auto;
+
+    text-align:center;
+
+    padding:2rem;
+
+    color:var(--muted);
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE
+|--------------------------------------------------------------------------
+*/
+
+@media(max-width:992px){
+
+    .sidebar{
+
+        transform:translateX(-100%);
+
+        transition:.3s ease;
+    }
+
+    .sidebar.show{
+
+        transform:translateX(0);
+    }
+
+    .main{
+
+        margin-left:0;
+    }
+
+    .search-box{
+
+        width:220px;
+    }
+}
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+    rgba(0,0,0,.45);
+
+    z-index:1500;
+
+    display:none;
+}
+
+.overlay.show{
+
+    display:block;
+}

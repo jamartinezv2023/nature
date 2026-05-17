@@ -13,15 +13,8 @@ class Mailer
 
         $mensaje = "Su código OTP es: {$otp}";
 
-        $path = __DIR__
-            . '/../../../storage/mail/log.txt';
-
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-
         file_put_contents(
-            $path,
+            __DIR__ . '/../../storage/mail/log.txt',
             date('Y-m-d H:i:s')
             . " -> {$email} -> {$mensaje}"
             . PHP_EOL,

@@ -1,40 +1,50 @@
+<?php
+
+
+$error = $_GET['error'] ?? '';
+
+?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<title>Verificar OTP</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <meta charset="UTF-8">
+
+    <title>Verificar OTP</title>
+
 </head>
-<body class="bg-light">
 
-<div class="container mt-5">
+<body>
 
-<div class="card shadow">
+    <h1>Verificación OTP</h1>
 
-<div class="card-header bg-warning">
-<h3>Doble Factor</h3>
-</div>
+    <?php if ($error): ?>
 
-<div class="card-body">
+        <p>
+            Código inválido
+        </p>
 
-<form action="../src/Controllers/AuthController.php?action=verify-otp" method="POST">
+    <?php endif; ?>
 
-<label>Código OTP</label>
+    <form
+        method="POST"
+        action="/verify-otp"
+    >
 
-<input type="text" class="form-control mb-3" name="otp">
+        <input
+            type="text"
+            name="otp"
+            placeholder="Ingrese OTP"
+            required
+        >
 
-<button class="btn btn-warning w-100">
-Validar Código
-</button>
+        <button type="submit">
+            Verificar
+        </button>
 
-</form>
-
-</div>
-
-</div>
-
-</div>
+    </form>
 
 </body>
 </html>

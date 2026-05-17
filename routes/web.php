@@ -1,25 +1,14 @@
 <?php
 
-declare(strict_types=1);
+use App\Presentation\Controllers\AuthController;
+use App\Presentation\Controllers\DashboardController;
 
 return [
 
-    'GET' => [
+    '/' => [AuthController::class, 'index'],
 
-        '/' => [
-            'view' => 'index.php'
-        ],
+    '/login' => [AuthController::class, 'login'],
 
-        '/dashboard' => [
-            'view' => 'dashboard.php'
-        ],
-    ],
+    '/dashboard' => [DashboardController::class, 'index'],
 
-    'POST' => [
-
-        '/login' => [
-            'controller' => 'AuthController',
-            'method' => 'login'
-        ],
-    ],
 ];
