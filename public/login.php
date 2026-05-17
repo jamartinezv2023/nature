@@ -173,3 +173,14 @@
         }
     });
 </script>
+
+<script>
+    // Sobrescribir la función de envío para integrarla al Router real mediante Fetch API
+    function enviarAutenticacionSaaS(datos) {
+        return fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datos)
+        }).then(response => response.json());
+    }
+</script>
