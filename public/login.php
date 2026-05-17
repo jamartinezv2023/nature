@@ -139,3 +139,37 @@
 </script>
 </body>
 </html>
+
+<!-- Integración Offline-First y Registro de Service Worker -->
+<script src="/assets/js/services/db.js"></script>
+<script>
+    // Registrar el Service Worker para almacenamiento en caché de activos UI
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('Service Worker registrado con éxito para el Tenant.', reg.scope))
+                .catch(err => console.error('Error registrando el Service Worker:', err));
+        });
+    }
+
+    // Monitoreo del estado de conectividad en tiempo real
+    function verificarConectividad() {
+        if (navigator.onLine) {
+            showToast("Conexión restablecida. Operando en modo SaaS Cloud.", "success");
+            document.body.style.borderTop = "6px solid var(--material-primary)";
+        } else {
+            showToast("Sin conectividad. El sistema ha cambiado automáticamente a Modo Offline Seguro.", "error");
+            document.body.style.borderTop = "6px solid #ff9800"; // Color naranja de advertencia constructiva
+        }
+    }
+
+    window.addEventListener('online', verificarConectividad);
+    window.addEventListener('offline', verificarConectividad);
+    
+    // Ejecución inicial al cargar la interfaz
+    document.addEventListener("DOMContentLoaded", () => {
+        if (!navigator.onLine) {
+            document.body.style.borderTop = "6px solid #ff9800";
+        }
+    });
+</script>
