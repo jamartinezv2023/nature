@@ -5,17 +5,11 @@ if (!isset($_SESSION["user"])) { header("Location: /index.php"); exit; }
 $userData = $_SESSION["user"];
 $rawName = is_array($userData) ? ($userData['nombre'] ?? $userData['email'] ?? 'Usuario') : $userData;
 
-// Función para limpiar la doble codificación UTF-8 de raíz
-function limpiar_double_utf8($str) {
-    if (!is_string($str)) return $str;
-    // Bucle para revertir la codificación rota si se detectan los bytes fantasmas Ã© o Ã
-    while (mb_detect_encoding($str, 'UTF-8', true) && (strpos($str, 'Ã©') !== false || strpos($str, 'Ã') !== false)) {
-        $str = mb_convert_encoding($str, 'ISO-8859-1', 'UTF-8');
-    }
-    return $str;
+if (mb_detect_encoding($rawName, 'UTF-8', true) === false || strpos($rawName, 'Ã') !== false) {
+    $userDisplay = mb_convert_encoding($rawName, 'UTF-8', 'ISO-8859-1, Windows-1252');
+} else {
+    $userDisplay = $rawName;
 }
-
-$userDisplay = limpiar_double_utf8($rawName);
 ?>
 <!DOCTYPE html>
 <html lang="es" class="h-full bg-slate-50">
@@ -23,7 +17,7 @@ $userDisplay = limpiar_double_utf8($rawName);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NATURESaaS - Panel Inteligente</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4/dist/index.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap-grid.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
