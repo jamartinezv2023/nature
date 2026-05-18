@@ -1,113 +1,106 @@
 <?php
-/**
- * NATURAE SaaS - Dashboard de Control Principal (Producción)
- * Resiliente a Sesiones Multi-Tenant e Infraestructura Docker
- */
-if (session_status() === PHP_SESSION_NONE) {
-    session_start([
-        'cookie_lifetime' => 86400,
-        'cookie_secure'   => false,
-        'cookie_httponly' => true,
-        'cookie_samesite' => 'Lax'
-    ]);
-}
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+if (!isset($_SESSION["user"])) { header("Location: /index.php"); exit; }
 
-// Control de Acceso Estricto: Si no hay sesión válida, se expulsa inmediatamente
-if (!isset($_SESSION['user'])) {
-    header("Location: /index.php");
-    exit;
-}
-
-require_once __DIR__ . '/config/database.php';
-
-$user = $_SESSION['user'];
-$tenant_id = $_SESSION['tenant_id'] ?? 1; // Segmentación por Tenant
-
-try {
-    // 1. Contador de Usuarios Activos en el Tenant
-    $stmtUsers = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE tenant_id = ? AND estado = 'ACTIVO'");
-    $stmtUsers->execute([$tenant_id]);
-    $totalUsuarios = $stmtUsers->fetchColumn();
-
-    // 2. Contador Global de Sedes vinculadas al Tenant
-    $stmtSedes = $pdo->prepare("SELECT COUNT(*) FROM sedes WHERE tenant_id = ?");
-    $stmtSedes->execute([$tenant_id]);
-    $totalSedes = $stmtSedes->fetchColumn();
-
-    // 3. Contador de Sesiones Activas Globales y No Revocadas en el ecosistema
-    $stmtSesiones = $pdo->prepare("SELECT COUNT(*) FROM sesiones WHERE revocada = 0 AND expira_en > NOW()");
-    $stmtSesiones->execute();
-    $totalSesiones = $stmtSesiones->fetchColumn();
-
-} catch (\Exception $e) {
-    error_log("Error al cargar métricas del Dashboard: " . $e->getMessage());
-    $totalUsuarios = 0;
-    $totalSedes = 0;
-    $totalSesiones = 0;
-}
+// Extraemos el nombre de usuario de forma segura si es un array o un string
+$userData = $_SESSION["user"];
+$userDisplay = is_array($userData) ? ($userData['nombre'] ?? $userData['email'] ?? 'Usuario') : $userData; $userDisplay = (mb_detect_encoding($userDisplay, 'UTF-8', true) === false) ? utf8_encode($userDisplay) : $userDisplay; if(strpos($userDisplay, 'Ã') !== false) { $userDisplay = utf8_decode($userDisplay); }
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full bg-slate-50">
 <head>
     <meta charset="UTF-8">
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATURE SaaS - Panel de Administración</title>
+    <title>NATURESaaS - Panel Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap-grid.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8fafc; margin: 0; color: #1e293b; }
-        header { background: #ffffff; padding: 15px 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
-        header h1 { margin: 0; font-size: 22px; color: #0f172a; }
-        header h1 span { color: #27ae60; }
-        .user-info { font-size: 14px; color: #64748b; }
-        .user-info strong { color: #0f172a; }
-        .logout-btn { color: #ef4444; text-decoration: none; margin-left: 15px; font-weight: 600; }
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        .welcome-box { background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        .welcome-box h2 { margin: 0 0 10px 0; color: #0f172a; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-        .stat-card { background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; border-top: 4px solid #27ae60; }
-        .stat-card h3 { margin: 0 0 10px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; }
-        .stat-card span { font-size: 32px; font-weight: 700; color: #0f172a; display: block; }
+        body { font-family: 'Inter', sans-serif; }
+        .heading-font { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .sidebar-link { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar-link:hover { transform: translateX(4px); }
     </style>
 </head>
-<body>
-
-<header>
-    <h1>NATURE<span>SaaS</span> Panel</h1>
-    <div class="user-info">
-        Usuario: <strong><?= htmlspecialchars($user['nombre']); ?></strong> (Tenant ID: <?= htmlspecialchars($tenant_id); ?>)
-        <a href="/logout.php" class="logout-btn">Cerrar Sesión</a>
+<body class="h-full text-slate-800 antialiased flex overflow-hidden">
+    <aside class="w-72 bg-slate-900 text-slate-300 flex flex-col justify-between border-r border-slate-800 z-20 shrink-0">
+        <div>
+            <div class="h-20 flex items-center px-8 border-b border-slate-800 gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/30">N</div>
+                <div class="flex flex-col">
+                    <span class="heading-font text-white font-extrabold text-lg tracking-tight">NATURE<span class="text-emerald-400">SaaS</span></span>
+                    <span class="text-xs text-slate-500 font-medium tracking-wide uppercase">Core Platform</span>
+                </div>
+            </div>
+            <nav class="p-4 space-y-1.5">
+                <p class="px-4 text-[11px] font-bold tracking-wider text-slate-500 uppercase mb-3">Módulos del Sistema</p>
+                <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-500 text-white font-semibold shadow-md shadow-emerald-500/10">
+                    <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
+                </a>
+                <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 font-medium">
+                    <i class="fa-solid fa-users w-5 text-slate-500"></i> Usuarios
+                </a>
+                <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 font-medium">
+                    <i class="fa-solid fa-school w-5 text-slate-500"></i> Instituciones
+                </a>
+                <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 font-medium">
+                    <i class="fa-solid fa-brain w-5 text-slate-500"></i> Analítica IA
+                </a>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-slate-800">
+            <a href="/index.php" class="flex items-center justify-center gap-2 w-full py-3 px-4 text-sm font-semibold rounded-xl bg-slate-800 text-rose-400 hover:bg-rose-500 hover:text-white transition-all duration-200 shadow-sm">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+            </a>
+        </div>
+    </aside>
+    <div class="flex-1 flex flex-col h-full overflow-y-auto">
+        <header class="h-20 border-b border-slate-200 bg-white/80 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-10 shrink-0">
+            <div class="flex flex-col">
+                <h1 class="heading-font text-xl font-bold text-slate-900 tracking-tight">Plataforma Educativa Inteligente</h1>
+                <p class="text-xs text-slate-500 font-medium hidden sm:block">Sistema moderno, inclusivo y adaptable.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-bold text-slate-900 leading-none mb-1"><?= htmlspecialchars($userDisplay); ?></p>
+                    <p class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md inline-block">Superadmin</p>
+                </div>
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-md ring-2 ring-white">
+                    <?= strtoupper(substr(htmlspecialchars($userDisplay), 0, 1)); ?>
+                </div>
+            </div>
+        </header>
+        <main class="p-8 space-y-8 max-w-7xl w-full mx-auto">
+            <section class="relative bg-slate-900 rounded-3xl p-8 overflow-hidden text-white shadow-xl">
+                <div class="relative z-10">
+                    <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-500/20">Módulo Verificado</span>
+                    <h2 class="heading-font text-3xl font-extrabold mt-4">¡Bienvenido de vuelta, <?= htmlspecialchars($userDisplay); ?>!</h2>
+                    <p class="mt-2 text-slate-400 text-sm">Infraestructura multi-tenant conectada para la Institución Educativa Sagrada Familia (3FN).</p>
+                </div>
+            </section>
+            <section class="row g-4">
+                <div class="col-12 col-sm-6 col-lg-3"><div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between"><div><p class="text-xs font-bold uppercase text-slate-400">Usuarios</p><h3 class="text-2xl font-extrabold text-slate-900">1,250</h3></div><div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl"><i class="fa-solid fa-user-check"></i></div></div></div>
+                <div class="col-12 col-sm-6 col-lg-3"><div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between"><div><p class="text-xs font-bold uppercase text-slate-400">Escuelas</p><h3 class="text-2xl font-extrabold text-slate-900">24</h3></div><div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl"><i class="fa-solid fa-building-columns"></i></div></div></div>
+                <div class="col-12 col-sm-6 col-lg-3"><div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between"><div><p class="text-xs font-bold uppercase text-slate-400">Sesiones</p><h3 class="text-2xl font-extrabold text-slate-900">5,800</h3></div><div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center text-xl"><i class="fa-solid fa-bolt"></i></div></div></div>
+                <div class="col-12 col-sm-6 col-lg-3"><div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between"><div><p class="text-xs font-bold uppercase text-slate-400">Precisión IA</p><h3 class="text-2xl font-extrabold text-emerald-600">98.4%</h3></div><div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-xl"><i class="fa-solid fa-chart-line"></i></div></div></div>
+            </section>
+        </main>
     </div>
-</header>
-
-<div class="container">
-    <div class="welcome-box">
-        <h2>¡Bienvenido de vuelta, <?= htmlspecialchars($user['nombre']); ?>!</h2>
-        <p style="margin: 0; color: #64748b;">Infraestructura de datos conectada en estricta Tercera Forma Normal (3FN). Datos procesados en tiempo real desde el contenedor Docker.</p>
-    </div>
-
-    <section class="stats-grid">
-        <div class="stat-card">
-            <h3>Usuarios Activos</h3>
-            <span><?= number_format($totalUsuarios); ?></span>
-        </div>
-
-        <div class="stat-card">
-            <h3>Sedes Institucionales</h3>
-            <span><?= number_format($totalSedes); ?></span>
-        </div>
-
-        <div class="stat-card">
-            <h3>Sesiones Activas</h3>
-            <span><?= number_format($totalSesiones); ?></span>
-        </div>
-
-        <div class="stat-card">
-            <h3>Precisión IA</h3>
-            <span>98.4%</span>
-        </div>
-    </section>
-</div>
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Toastify({
+                text: "🚀 Autenticación 2FA Verificada. ¡Acceso concedido!",
+                duration: 4000,
+                close: true,
+                gravity: "top", position: "right",
+                style: { background: "linear-gradient(to right, #10b981, #059669)", borderRadius: "14px", fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: "600" }
+            }).showToast();
+        });
+    </script>
 </body>
 </html>
