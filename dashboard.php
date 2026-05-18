@@ -2,9 +2,12 @@
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (!isset($_SESSION["user"])) { header("Location: /index.php"); exit; }
 
-// Extraemos el nombre de usuario de forma segura si es un array o un string
+// Extracción limpia y segura compatible con PHP 8.x+
 $userData = $_SESSION["user"];
-$userDisplay = is_array($userData) ? ($userData['nombre'] ?? $userData['email'] ?? 'Usuario') : $userData; $userDisplay = (mb_detect_encoding($userDisplay, 'UTF-8', true) === false) ? utf8_encode($userDisplay) : $userDisplay; if(strpos($userDisplay, 'Ã') !== false) { $userDisplay = utf8_decode($userDisplay); }
+$rawName = is_array($userData) ? ($userData['nombre'] ?? $userData['email'] ?? 'Usuario') : $userData;
+
+// Convertimos la codificación de forma moderna sin usar utf8_decode
+$userDisplay = mb_convert_encoding($rawName, 'UTF-8', 'UTF-8, ISO-8859-1, Windows-1252');
 ?>
 <!DOCTYPE html>
 <html lang="es" class="h-full bg-slate-50">
