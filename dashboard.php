@@ -12,17 +12,31 @@ if (is_array($userData)) {
     $rawName = $userData;
 }
 
-// 2. Saneamiento moderno UTF-8 sin usar funciones obsoletas (Bye utf8_decode)
-if (mb_check_encoding($rawName, 'UTF-8')) {
-    if (strpos($rawName, 'Ã') !== false) {
-        // Convierte la doble codificación interpretando los bytes crudos
-        $userDisplay = mb_convert_encoding($rawName, 'UTF-8', 'ISO-8859-1');
-    } else {
-        $userDisplay = $rawName;
+/**
+ * Saneador Maestro de Codificación Recursiva
+ * Deshace múltiples capas de codificación corrupta (Double/Triple UTF-8)
+ */
+function sanearNombreEstrategico($cadena) {
+    if (empty($cadena)) return "Usuario";
+    
+    // Si no es un string válido, lo casteamos
+    $cadena = (string)$cadena;
+    
+    // Bucle de control: Mientras detecte patrones de doble codificación UTF-8 / ISO-8859-1, los revierte
+    while (preg_match('/[\x{00C2}-\x{00C3}][\x{0080}-\x{00BF}]/u', $cadena) || strpos($cadena, 'Ã') !== false) {
+        $intento = mb_convert_encoding($cadena, 'ISO-8859-1', 'UTF-8');
+        // Si la conversión arroja un string vacío o rompe el flujo, detenemos el bucle
+        if ($intento === false || $intento === $cadena) {
+            break;
+        }
+        $cadena = $intento;
     }
-} else {
-    $userDisplay = mb_convert_encoding($rawName, 'UTF-8', 'ISO-8859-1');
+    
+    // Aseguramos que la salida final sea estrictamente UTF-8 limpia
+    return mb_convert_encoding($cadena, 'UTF-8', 'UTF-8, ISO-8859-1');
 }
+
+$userDisplay = sanearNombreEstrategico($rawName);
 ?>
 <!DOCTYPE html>
 <html lang="es" class="h-full bg-slate-50">
@@ -114,7 +128,7 @@ if (mb_check_encoding($rawName, 'UTF-8')) {
             <section class="relative bg-slate-900 rounded-[2rem] p-10 overflow-hidden text-white shadow-2xl">
                 <div class="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-emerald-500/10 to-transparent"></div>
                 <div class="relative z-10">
-                    <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-500/30">Identidad 100% Saneada</span>
+                    <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-500/30">Identidad Saneada Permanentemente</span>
                     <h2 class="heading-font text-4xl font-extrabold mt-4 tracking-tight">¡Bienvenido de vuelta, <?= htmlspecialchars($userDisplay, ENT_QUOTES, 'UTF-8'); ?>!</h2>
                     <p class="mt-2 text-slate-400 text-sm max-w-2xl leading-relaxed">Su ecosistema educativo ahora integra Historia Pedagógica Interoperable, Inclusión PIAR, Seguimiento Ambiental y Analítica Predictiva con IA.</p>
                 </div>
@@ -194,7 +208,7 @@ if (mb_check_encoding($rawName, 'UTF-8')) {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             Toastify({
-                text: "🌌 Ecosistema NATURESaaS v1.0 Saneado sin Advertencias.",
+                text: "🌌 Ecosistema Saneado de Forma Recursiva.",
                 duration: 4000,
                 close: true,
                 gravity: "top", position: "right",
