@@ -12,11 +12,11 @@ if (is_array($userData)) {
     $rawName = $userData;
 }
 
-// 2. Control estricto de doble codificación UTF-8 para "José Alfredo Martínez Valdés"
+// 2. Saneamiento moderno UTF-8 sin usar funciones obsoletas (Bye utf8_decode)
 if (mb_check_encoding($rawName, 'UTF-8')) {
-    // Si el nombre contiene caracteres de doble codificación por transporte de datos anteriores
     if (strpos($rawName, 'Ã') !== false) {
-        $userDisplay = utf8_decode($rawName);
+        // Convierte la doble codificación interpretando los bytes crudos
+        $userDisplay = mb_convert_encoding($rawName, 'UTF-8', 'ISO-8859-1');
     } else {
         $userDisplay = $rawName;
     }
@@ -114,7 +114,7 @@ if (mb_check_encoding($rawName, 'UTF-8')) {
             <section class="relative bg-slate-900 rounded-[2rem] p-10 overflow-hidden text-white shadow-2xl">
                 <div class="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-emerald-500/10 to-transparent"></div>
                 <div class="relative z-10">
-                    <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-500/30">Identidad Saneada</span>
+                    <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-500/30">Identidad 100% Saneada</span>
                     <h2 class="heading-font text-4xl font-extrabold mt-4 tracking-tight">¡Bienvenido de vuelta, <?= htmlspecialchars($userDisplay, ENT_QUOTES, 'UTF-8'); ?>!</h2>
                     <p class="mt-2 text-slate-400 text-sm max-w-2xl leading-relaxed">Su ecosistema educativo ahora integra Historia Pedagógica Interoperable, Inclusión PIAR, Seguimiento Ambiental y Analítica Predictiva con IA.</p>
                 </div>
@@ -194,7 +194,7 @@ if (mb_check_encoding($rawName, 'UTF-8')) {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             Toastify({
-                text: "🌌 Ecosistema NATURESaaS v1.0 Saneado.",
+                text: "🌌 Ecosistema NATURESaaS v1.0 Saneado sin Advertencias.",
                 duration: 4000,
                 close: true,
                 gravity: "top", position: "right",
