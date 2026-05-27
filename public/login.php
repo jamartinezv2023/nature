@@ -84,103 +84,210 @@
     </div>
 </div>
 
-<script>
-    let currentStep = 1;
-
-    function showToast(message, type = 'success') {
-        Toastify({
-            text: message,
-            duration: 3500,
-            gravity: "top",
-            position: "right",
-            style: {
-                background: type === 'success' ? "#2e7d32" : "#d32f2f",
-                borderRadius: "8px"
-            }
-        }).showToast();
-    }
-
-    function submitStep1() {
-        const tenant_id = document.getElementById('tenant_id').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        if(!tenant_id || !email || !password) {
-            showToast("Todos los campos del primer factor son obligatorios.", "error");
-            return;
-        }
-
-        // Simulación de llamado a LoginController vía Fetch API
-        showToast("Verificando credenciales institucionales...");
-        
-        // Simulación de respuesta positiva con 2FA activo para demostración visual de flujo continuo
-        setTimeout(() => {
-            document.getElementById('step1').classList.add('d-none-custom');
-            setTimeout(() => {
-                document.getElementById('step2').classList.remove('d-none-custom');
-                currentStep = 2;
-                showToast("Primer factor aprobado. Por favor ingrese su OTP.", "success");
-            }, 300);
-        }, 1000);
-    }
-
-    function submitStep2() {
-        const otp = document.getElementById('otp_code').value;
-        if(otp.length !== 6) {
-            showToast("El código OTP debe ser de exactamente 6 dígitos.", "error");
-            return;
-        }
-
-        showToast("Comprobando código de seguridad...");
-        setTimeout(() => {
-            showToast("Autenticación SaaS completada con éxito. Redirigiendo...", "success");
-        }, 1200);
-    }
-</script>
 </body>
 </html>
 
 <!-- Integración Offline-First y Registro de Service Worker -->
-<script src="/assets/js/services/db.js"></script>
-<script>
-    // Registrar el Service Worker para almacenamiento en caché de activos UI
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('Service Worker registrado con éxito para el Tenant.', reg.scope))
-                .catch(err => console.error('Error registrando el Service Worker:', err));
-        });
-    }
 
-    // Monitoreo del estado de conectividad en tiempo real
-    function verificarConectividad() {
-        if (navigator.onLine) {
-            showToast("Conexión restablecida. Operando en modo SaaS Cloud.", "success");
-            document.body.style.borderTop = "6px solid var(--material-primary)";
-        } else {
-            showToast("Sin conectividad. El sistema ha cambiado automáticamente a Modo Offline Seguro.", "error");
-            document.body.style.borderTop = "6px solid #ff9800"; // Color naranja de advertencia constructiva
-        }
-    }
-
-    window.addEventListener('online', verificarConectividad);
-    window.addEventListener('offline', verificarConectividad);
-    
-    // Ejecución inicial al cargar la interfaz
-    document.addEventListener("DOMContentLoaded", () => {
-        if (!navigator.onLine) {
-            document.body.style.borderTop = "6px solid #ff9800";
-        }
-    });
-</script>
 
 <script>
-    // Sobrescribir la función de envío para integrarla al Router real mediante Fetch API
-    function enviarAutenticacionSaaS(datos) {
-        return fetch('/api/auth/login', {
+
+function showToast(message, type = 'success') {
+
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+            background:
+                type === 'success'
+                ? "#2e7d32"
+                : "#c62828"
+        }
+    }).showToast();
+}
+
+/*
+|--------------------------------------------------------------------------
+| LOGIN REAL
+|--------------------------------------------------------------------------
+*/
+
+async function submitStep1() {
+
+    const tenant_id =
+        document.getElementById('tenant_id').value;
+
+    const email =
+        document.getElementById('email').value;
+
+    const password =
+        document.getElementById('password').value;
+
+    if (!tenant_id || !email || !password) {
+
+        showToast(
+            "Todos los campos son obligatorios",
+            "error"
+        );
+
+        return;
+    }
+
+    showToast(
+        "Verificando credenciales..."
+    );
+
+    try {
+
+        const response =
+        await fetch('/api/auth/login', {
+
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(datos)
-        }).then(response => response.json());
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                tenant_id,
+                email,
+                password
+            })
+        });
+
+        const data =
+            await response.json();
+
+        console.log(data);
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGIN OK
+        |--------------------------------------------------------------------------
+        */
+
+        if (data.success) {
+
+            showToast(
+                "Primer factor validado"
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | MOSTRAR OTP
+            |--------------------------------------------------------------------------
+            */
+
+            document
+                .getElementById('step1')
+                .classList
+                .add('d-none-custom');
+
+            document
+                .getElementById('step2')
+                .classList
+                .remove('d-none-custom');
+
+            return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ERROR
+        |--------------------------------------------------------------------------
+        */
+
+        showToast(
+            data.message || "Credenciales inválidas",
+            "error"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Error conectando con backend",
+            "error"
+        );
     }
+}
+
+/*
+|--------------------------------------------------------------------------
+| OTP REAL
+|--------------------------------------------------------------------------
+*/
+
+function submitStep2() {
+
+    const otp =
+        document.getElementById("otp_code").value;
+
+    if (otp.length !== 6) {
+
+        showToast(
+            "El OTP debe contener 6 dígitos.",
+            "error"
+        );
+
+        return;
+    }
+
+    showToast(
+        "Validando OTP...",
+        "success"
+    );
+
+    fetch("/verify-otp-submit", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            otp: otp
+        })
+
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            showToast(
+                "OTP validado correctamente.",
+                "success"
+            );
+
+            setTimeout(() => {
+
+                window.location.href = data.redirect;
+
+            }, 1200);
+
+        } else {
+
+            showToast(
+                data.message || "OTP inválido.",
+                "error"
+            );
+        }
+    })
+    .catch(error => {
+
+        console.error(error);
+
+        showToast(
+            "Error conectando con backend.",
+            "error"
+        );
+    });
+}
+
 </script>
+

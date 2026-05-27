@@ -1,11 +1,45 @@
 {
-  "name": "nature/platform",
-  "description": "Nature Enterprise Platform",
-  "autoload": {
-    "psr-4": {
-      "App\\": "app/"
-    }
-  },
-  "require": {},
-  "require-dev": {}
+    "name": "ecosistema/nature",
+    "description": "Ecosistema Nature SaaS Multitenant Enterprise",
+    "type": "project",
+
+    "require": {
+        "php": "^8.3",
+        "vlucas/phpdotenv": "^5.6",
+        "monolog/monolog": "^3.6"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "^11.5",
+        "phpstan/phpstan": "^1.12",
+        "friendsofphp/php-cs-fixer": "^3.66",
+        "squizlabs/php_codesniffer": "^3.10"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Nature\\": "src/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse src",
+        "fix": "php-cs-fixer fix",
+        "cs": "phpcs"
+    },
+
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

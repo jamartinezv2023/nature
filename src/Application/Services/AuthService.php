@@ -1,47 +1,72 @@
 <?php
 
-declare(strict_types=1);
+namespace Nature\Application\Services;
 
-namespace App\Application\Services;
-
-use App\Infrastructure\Repositories\UserRepository;
+use PDO;
 
 class AuthService
 {
-    public function __construct(
-        private UserRepository $repository
-    ) {
+    private PDO $db;
+
+    public function __construct(PDO $db)
+    {
+        $this->db = $db;
     }
 
     public function login(
         string $email,
         string $password
-    ): array|false {
+    ): array {
 
-        $user = $this->repository->findByEmail($email);
+        $query =
+            $this->db->prepare("
+                SELECT *
+                FROM users
+                WHERE email = :email
+                LIMIT 1
+            ");
+
+        $query->execute([
+            'email' => $email
+        ]);
+
+        $user =
+            $query->fetch(PDO::FETCH_ASSOC);
 
         if (!$user) {
-            return false;
+
+            return [
+                'success' => false,
+                'message' => 'Usuario no encontrado'
+            ];
         }
 
         if (
             !password_verify(
                 $password,
-                $user['password_hash']
+                $user['password']
             )
         ) {
-            return false;
+
+            return [
+                'success' => false,
+                'message' => 'Contraseña inválida'
+            ];
         }
 
-        if ($user['estado'] !== 'ACTIVO') {
-            return false;
-        }
+        $_SESSION['authenticated'] = true;
 
-        return $user;
-    }
+        $_SESSION['user'] = [
+            'id' => $user['id'],
+            'tenant_id' => $user['tenant_id'],
+            'full_name' => $user['full_name'],
+            'email' => $user['email'],
+            'role' => $user['role']
+        ];
 
-    public function generateOTP(): int
-    {
-        return random_int(100000, 999999);
+        return [
+            'success' => true,
+            'message' => 'Autenticación correcta'
+        ];
     }
 }

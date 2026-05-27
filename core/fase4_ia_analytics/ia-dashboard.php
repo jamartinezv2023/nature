@@ -17,7 +17,7 @@ if (!isset($_SESSION["user"])) { header("Location: /index.php"); exit; }
 <body class="p-8 max-w-4xl mx-auto">
 
     <div class="mb-6 flex justify-between items-center">
-        <a href="/dashboard.php" class="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-all">
+        <a href="//dashboard" class="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-all">
             <i class="fa-solid fa-arrow-left"></i> Volver al Core Principal
         </a>
         <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full border border-purple-200">

@@ -85,16 +85,16 @@ $userDisplay = sanearNombreEstrategico($rawName);
                 <a href="#" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-500 text-white font-semibold shadow-md">
                     <i class="fa-solid fa-chart-pie w-5"></i> General
                 </a>
-                <a href="/modules/hpi" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
+                <a href="core/fase1_hpi_curricular/hpi-formulario.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
                     <i class="fa-solid fa-id-card-clip w-5"></i> Registro HPI
                 </a>
-                <a href="/modules/piar" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
+                <a href="core/fase2_piar_inclusion/piar-formulario.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
                     <i class="fa-solid fa-user-shield w-5 text-indigo-400"></i> Módulo PIAR
                 </a>
-                <a href="/modules/ambiental" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
+                <a href="core/fase3_ambiental/ambiental-formulario.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
                     <i class="fa-solid fa-leaf w-5 text-emerald-400"></i> Gestión Ambiental
                 </a>
-                <a href="/modules/ia" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
+                <a href="core/fase4_ia_analytics/ia-/dashboard" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
                     <i class="fa-solid fa-brain w-5 text-purple-400"></i> Analítica IA
                 </a>
             </nav>
@@ -159,7 +159,7 @@ $userDisplay = sanearNombreEstrategico($rawName);
                 </h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     
-                    <a href="/modules/hpi" class="block group">
+                    <a href="core/fase1_hpi_curricular/hpi-formulario.php" class="block group">
                         <div class="bg-white p-6 rounded-[1.5rem] border border-slate-200 shadow-sm hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/5 transition-all h-full">
                             <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-id-card"></i>
@@ -169,7 +169,7 @@ $userDisplay = sanearNombreEstrategico($rawName);
                         </div>
                     </a>
 
-                    <a href="/modules/piar" class="block group">
+                    <a href="core/fase2_piar_inclusion/piar-formulario.php" class="block group">
                         <div class="bg-white p-6 rounded-[1.5rem] border border-slate-200 shadow-sm hover:border-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/5 transition-all h-full">
                             <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-universal-access"></i>
@@ -179,7 +179,7 @@ $userDisplay = sanearNombreEstrategico($rawName);
                         </div>
                     </a>
 
-                    <a href="/modules/ambiental" class="block group">
+                    <a href="core/fase3_ambiental/ambiental-formulario.php" class="block group">
                         <div class="bg-white p-6 rounded-[1.5rem] border border-slate-200 shadow-sm hover:border-teal-500/50 hover:shadow-xl hover:shadow-teal-500/5 transition-all h-full">
                             <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-leaf"></i>
@@ -189,7 +189,7 @@ $userDisplay = sanearNombreEstrategico($rawName);
                         </div>
                     </a>
 
-                    <a href="/modules/ia" class="block group">
+                    <a href="core/fase4_ia_analytics/ia-/dashboard" class="block group">
                         <div class="bg-white p-6 rounded-[1.5rem] border border-slate-200 shadow-sm hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/5 transition-all h-full">
                             <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-brain"></i>

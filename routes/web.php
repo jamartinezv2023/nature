@@ -11,4 +11,10 @@ return [
 
     '/dashboard' => [DashboardController::class, 'index'],
 
+    '/verify-otp-submit' => function () {
+
+        require_once __DIR__
+        . '/../src/Controllers/OTPController.php';
+    }
+
 ];

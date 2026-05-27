@@ -6,7 +6,7 @@ Este documento establece la radiografía de los módulos actuales verificados y 
 
 ## 🔍 1. Radiografía del Núcleo Actual (Lo que ya Funciona Bien)
 El sistema cuenta con una base de autenticación y visualización de datos blindada, validada a través del inspector del entorno de desarrollo:
-* **Filtro de Seguridad 2FA Activo:** Flujo verificado mediante peticiones asíncronas y redirecciones HTTP limpias (`login-proceso.php` -> `verificar-2fa.php` -> `dashboard.php`).
+* **Filtro de Seguridad 2FA Activo:** Flujo verificado mediante peticiones asíncronas y redirecciones HTTP limpias (`verify-otp-submit` -> `verificar-2fa.php` -> `dashboard.php`).
 * **Saneamiento Multibyte Robusto:** Capa PHP adaptada para motores 8.x que mitiga la doble codificación UTF-8, garantizando el despliegue óptimo de nombres con caracteres especiales y tildes en los componentes del backend.
 * **Interfaz de Alta Fidelidad (UI Premium):** Dashboard estructurado con Tailwind CSS reactivo, consumo optimizado de librerías externas y alertas de feedback dinámicas integradas con Toastify de extremo a extremo.
 

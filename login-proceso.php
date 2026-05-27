@@ -53,7 +53,7 @@ try {
         $stmtLog = $pdo->prepare("INSERT INTO audit_log (tenant_id, usuario_id, accion, ip) VALUES (?, ?, 'LOGIN_DIRECTO_EXITOSO', ?)");
         $stmtLog->execute([$usuario['tenant_id'], $usuario['id'], $_SERVER['REMOTE_ADDR']]);
 
-        header("Location: /dashboard.php");
+        header("Location: /dashboard");
         exit;
     }
 } catch (\Exception $e) {

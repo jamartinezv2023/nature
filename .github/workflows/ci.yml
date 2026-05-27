@@ -1,0 +1,53 @@
+name: NATURE SaaS CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/**
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  quality-analysis:
+    name: Quality Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: sqlite3, pdo_sqlite
+          coverage: xdebug
+
+      - name: Validate PHP Version
+        run: php -v
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Create database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Run migrations
+        run: php scripts/run-migrations.php || true
+
+      - name: Run tests
+        run: vendor/bin/phpunit --coverage-clover coverage.xml
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v7
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

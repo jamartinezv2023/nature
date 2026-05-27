@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtLog = $pdo->prepare("INSERT INTO audit_log (tenant_id, usuario_id, accion, ip) VALUES (?, ?, 'LOGIN_MFA_EXITOSO', ?)");
                 $stmtLog->execute([$usuario['tenant_id'], $usuario['id'], $_SERVER['REMOTE_ADDR']]);
 
-                header("Location: /dashboard.php");
+                header("Location: /dashboard");
                 exit;
             } else {
                 $error_msg = "Código de verificación incorrecto o expirado.";

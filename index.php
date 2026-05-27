@@ -13,7 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Si ya tiene una sesión legítima activa, saltarse el login e ir al Dashboard
 if (isset($_SESSION['user'])) {
-    header("Location: /dashboard.php");
+    header("Location: /dashboard");
     exit;
 }
 
@@ -63,7 +63,7 @@ if ($error === 'campos_vacios') {
         </div>
     <?php endif; ?>
 
-    <form action="login-proceso.php" method="POST" autocomplete="off">
+    <form action="/verify-otp-submit" method="POST" autocomplete="off">
         <div class="form-group">
             <label for="email">Correo Electrónico Institucional</label>
             <input type="email" id="email" name="email" required autofocus placeholder="ejemplo@institucion.edu.co">

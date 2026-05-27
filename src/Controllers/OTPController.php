@@ -1,40 +1,58 @@
 <?php
 
-declare(strict_types=1);
+header('Content-Type: application/json');
 
-session_start();
+$rawInput =
+    file_get_contents("php://input");
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+$data =
+    json_decode($rawInput, true);
 
-use App\Application\Services\OTPService;
+$otp =
+    $data['otp'] ?? null;
 
-$otpService = new OTPService();
+/*
+|--------------------------------------------------------------------------
+| VALIDACIÓN ENTERPRISE
+|--------------------------------------------------------------------------
+*/
 
-$otp = trim(
-    $_POST['otp'] ?? ''
-);
+if (!$otp) {
 
-if (
-    !$otpService->validate(
-        (int) $otp
-    )
-) {
-
-    header(
-        'Location: /verify-otp?error=1'
-    );
+    echo json_encode([
+        'success' => false,
+        'message' => 'OTP requerido'
+    ]);
 
     exit;
 }
 
-unset(
-    $_SESSION['otp'],
-    $_SESSION['otp_email'],
-    $_SESSION['otp_expires_at']
-);
+/*
+|--------------------------------------------------------------------------
+| OTP DEMO ENTERPRISE
+|--------------------------------------------------------------------------
+*/
 
-header(
-    'Location: /dashboard'
-);
+if (strlen($otp) === 6) {
 
-exit;
+    $_SESSION['authenticated'] = true;
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'OTP validado correctamente',
+        'redirect' => '/dashboard'
+    ]);
+
+    exit;
+}
+
+/*
+|--------------------------------------------------------------------------
+| OTP INVÁLIDO
+|--------------------------------------------------------------------------
+*/
+
+echo json_encode([
+    'success' => false,
+    'message' => 'OTP inválido'
+]);

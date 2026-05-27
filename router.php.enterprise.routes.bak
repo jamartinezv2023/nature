@@ -91,31 +91,6 @@ switch ($uri) {
     |--------------------------------------------------------------------------
     */
 
-
-    case '/modules/hpi':
-
-        require $publicPath . '/modules/hpi/index.php';
-
-        break;
-
-    case '/modules/piar':
-
-        require $publicPath . '/modules/piar/index.php';
-
-        break;
-
-    case '/modules/ambiental':
-
-        require $publicPath . '/modules/ambiental/index.php';
-
-        break;
-
-    case '/modules/ia':
-
-        require $publicPath . '/modules/ia/index.php';
-
-        break;
-
     case '/dashboard':
 
         require $publicPath

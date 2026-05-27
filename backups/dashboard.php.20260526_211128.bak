@@ -94,7 +94,7 @@ $userDisplay = sanearNombreEstrategico($rawName);
                 <a href="core/fase3_ambiental/ambiental-formulario.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
                     <i class="fa-solid fa-leaf w-5 text-emerald-400"></i> Gestión Ambiental
                 </a>
-                <a href="core/fase4_ia_analytics/ia-dashboard.php" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
+                <a href="core/fase4_ia_analytics/ia-/dashboard" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-100 font-medium">
                     <i class="fa-solid fa-brain w-5 text-purple-400"></i> Analítica IA
                 </a>
             </nav>
@@ -189,7 +189,7 @@ $userDisplay = sanearNombreEstrategico($rawName);
                         </div>
                     </a>
 
-                    <a href="core/fase4_ia_analytics/ia-dashboard.php" class="block group">
+                    <a href="core/fase4_ia_analytics/ia-/dashboard" class="block group">
                         <div class="bg-white p-6 rounded-[1.5rem] border border-slate-200 shadow-sm hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/5 transition-all h-full">
                             <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-brain"></i>
