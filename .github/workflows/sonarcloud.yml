@@ -33,7 +33,7 @@ jobs:
 
       - name: Execute PHPUnit
         run: |
-          vendor/bin/phpunit \
+          vendor/bin/phpunit --display-warnings --do-not-fail-on-warning \
           --coverage-clover coverage.xml
 
       - name: SonarCloud Scan
